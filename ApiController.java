@@ -139,4 +139,66 @@ public class ApiController {
 		
 		return "product map: " + productMap;
 	}
+	/**
+	 * 7. 多筆參數轉 bean
+	 * 路徑： /person?name=John&age=18&score=90&pass=true
+	 * 路徑： /person?name=Mary&age=17&score=40&pass=false
+	 * 網址: http://localhost:8080/api/person?name=John&age=18&score=90&pass=true
+	 * 網址: http://localhost:8080/api/person?name=Mary&age=17&score=40&pass=false
+	 * 設計一個 Person 的 bean 物件
+	 */
+	@GetMapping("/person")
+	@ResponseBody
+	public String getPerson(Person person) {
+		return "Person = " + person;
+	}
+	/**
+	 * 8. 路徑參數: @PathVariable
+	 * 路徑：/score/80
+	 * 路徑：/score/40
+	 * 網址：http:/localhost:8080/api/score/80
+	 * 網址：http:/localhost:8080/api/score/40
+	 */
+	@GetMapping("/score/{value}")
+	@ResponseBody
+	public String getScore(@PathVariable("value") Integer value) {
+		String text = """
+					<html>
+						<h1>分數： %d Pass: %b</h1>
+					</html>
+				""";
+		
+		return String.format(text, value, value>=60);
+	}
+	
+	/**
+	 * Lab: 取水果
+	 * 路徑： /fruit/1
+	 * 網址：http:/localhost:8080/api/fruit/1
+	 * 網址：http:/localhost:8080/api/fruit/2
+	 * 目的：取得單一水果
+ 	 */
+	@GetMapping("/fruit/{id}")
+	@ResponseBody
+	public String getFruit(@PathVariable("id") Integer id) {
+		Map<Integer, String> fruits = Map.of(1, "蘋果", 2, "香蕉", 3, "柳丁");
+		String html = """ 
+					<html>
+						<h1>得到： %s</h1>
+					</html>
+				""";
+		return String.format(html, fruits.get(id));
+	}
+	/**
+	 * Lab: 取水果
+	 * 路徑： /fruits
+	 * 網址：http:/localhost:8080/fruits
+	 * 目的：取得所有水果
+ 	 */
+	@GetMapping("/fruits")
+	@ResponseBody
+	public String getFruits() {
+		Map<Integer, String> fruits = Map.of(1, "蘋果", 2, "香蕉", 3, "柳丁");
+		return fruits.toString();
+	}
 }
